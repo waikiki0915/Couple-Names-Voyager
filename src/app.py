@@ -52,8 +52,11 @@ def update_graph2(column_name):
         dff2 = df[(df["Spouse Name"] == nameb) & (df['name'] == column_name)]
         fig.add_trace(go.Scatter(x=dff2["Marriage Year"], y=dff2["Count"],
                         mode='lines',
-                        name=nameb))
-    fig.update_layout(title= column_name + "'s spouse name pattern over time")
+                    name=nameb))
+    fig.update_layout(title= column_name + "'s spouse name pattern over time",
+                     xaxis_title="Marriage Year",
+                    yaxis_title="Count", 
+                     legend_title="Top Spouse Names")
     return fig
 
 if __name__ == "__main__":
