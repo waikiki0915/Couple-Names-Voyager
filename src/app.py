@@ -37,8 +37,6 @@ df.columns = ['name','Spouse Name', 'Marriage Year', 'Count']
 # In[132]:
 
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
 
 # In[133]:
 
@@ -46,8 +44,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
-app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
-
+app = Dash(__name__)
 # Create server variable with Flask server object for use with gunicorn
 server = app.server
 
