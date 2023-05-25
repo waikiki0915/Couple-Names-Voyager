@@ -10,9 +10,7 @@ import pandas as pd
 # In[125]:
 
 
-df = pd.read_csv("/Users/gaoangw/Downloads/full_data.csv")
-
-
+df = pd.read_csv("full_data.csv")
 # In[126]:
 
 
