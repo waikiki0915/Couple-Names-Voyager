@@ -1,51 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[124]:
-
-
 import pandas as pd
-
-
-# In[125]:
-
-
 df = pd.read_csv("full_data.csv")
-
-# In[126]:
-
-
 df = df.drop(columns = 'Unnamed: 0')
-
-
-# In[127]:
-
-
 df.columns = ['name','Spouse Name', 'Marriage Year', 'Count']
-
-
-# In[128]:
-
-
-
-# In[129]:
-
-
-
-# In[131]:
-
-# In[132]:
-
-
-
-# In[133]:
-
-
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
 app = Dash(__name__)
-# Create server variable with Flask server object for use with gunicorn
 server = app.server
 
 app.layout = html.Div([
@@ -74,14 +34,8 @@ def update_graph(column_name):
     return fig
 
 
-# In[136]:
-
-
-app.run_server(debug=False)
-
-
-# In[ ]:
-
+if __name__ == "__main__":
+    app.run_server(debug=False)
 
 
 
