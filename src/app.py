@@ -89,7 +89,7 @@ def update_graph(column_name):
 Input('crossfilter-yaxis-type', 'value'))
 def update_graph2(column_name, yaxis):
     dff = df[df['name'] == column_name]
-    fig = px.line(df[df.name== 'John'], x="Marriage Year", y= yaxis, color="Spouse Name")
+    fig = px.line(dff, x="Marriage Year", y= yaxis, color="Spouse Name")
     fig.update_layout(title= column_name + "'s spouse name pattern over time")
     fig.update_yaxes(title=yaxis)
     return fig
