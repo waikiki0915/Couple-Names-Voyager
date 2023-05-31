@@ -1,62 +1,102 @@
 import pandas as pd
-df = pd.read_csv("full_data.csv")
-df = df.drop(columns = 'Unnamed: 0')
-df.columns = ['name','Spouse Name', 'Marriage Year', 'Count']
+df = pd.read_csv("full_data2.csv")
 top15 = pd.read_csv("top15.csv")
-top15.columns = ['name','Spouse Name', 'Count']
+top1pair_perYear = pd.read_csv("top1pair_perYear.csv")
+top15.columns = ['name','Spouse Name', 'Count_overall']
+df.columns = ['name','Spouse Name', 'Marriage Year', 'Count','Percentage']
+df = df.merge(top15)
+df = df.sort_values (by = ['name','Count_overall','Marriage Year'], ascending=[False, False, True])
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
 app = Dash(__name__)
 server = app.server
+markdown_text1 = '''
+- We showcase a 163-year trend of marriage couple names in King County, providing a fun and informative way to explore historical naming trends for couples.
+- With this tool, you can delve into the fascinating world of marriage names and discover how they've changed over time.
+- To reveal the underlying name patterns and uncover people's (subconscious) name preferences.
+- A deeper understanding of the cultural, historical, and social aspects that influence name choices in relationships.
+'''
+
+markdown_text2 = '''
+### Overall Trend 
+- By showing the top 1 marriage couple name per year, you can discover how they've changed over time. Additionally,
+you can check [Baby Names Voyager](https://namerology.com/baby-name-grapher/) to see how those popular names become top marriage names 30 years later.
+'''
+
+
+markdown_text3 = '''
+### Cultural and Historical Trend
+- Now let's play around the data (1.2 million marriage records) and see the cultural, historical, and social aspects that influence name choices in relationships.
+- You can enter a Latin American/Asian/Arabic name and see their changes over time because of racial population makeup shift
+- You can enter your own first name to see if it make sense to you! 
+'''
+
 
 app.layout = html.Div([
-  html.H1(children='Couple Names Voyager'),
+   
+    html.H1(children='Couple Names Voyager'),
+    html.Div([
+    dcc.Markdown(children=markdown_text1)
+]),
+        html.Div([
+    dcc.Markdown(children=markdown_text2)
+]),
+    dcc.Graph(id='overall'),
+    
+    html.Div([
+    dcc.Markdown(children=markdown_text3)
+]),
 
     html.Div(children='''
         Enter a first name, and discover the evolving pattern of their spouse's name over time! 
-    '''),  
-  html.Div([
+    '''),
+    
+    html.Div([
 
         html.Div([
             dcc.Dropdown(
                 df['name'].unique(),
                 'John',
-                id='input_name'
+                id='input_name', 
+                placeholder="Type/Choose a first name"
+            ),
+            dcc.RadioItems(
+                ['Count', 'Percentage'],
+                'Count',
+                id='crossfilter-yaxis-type',
+                labelStyle={'display': 'inline-block', 'marginTop': '5px'}
             )
         ], style={'width': '48%', 'display': 'inline-block'}),
     ]),
-    dcc.Graph(id='pie'),
+
     dcc.Graph(id='graphic')
 ])
 
 
 @app.callback(
-    Output('pie', 'figure'),
+    Output('overall', 'figure'),
     Input('input_name', 'value'))
 def update_graph(column_name):
-    dff = top15[top15['name'] == column_name]
-    fig = px.pie(dff, values='Count', names='Spouse Name', title= column_name + "'s Top Spouse Names")
-    fig.update_traces(textposition='inside', textinfo='percent+label', showlegend=False)
+    fig = px.scatter(top1pair_perYear, x="Marriage Year", y="Count", hover_data=['Name Pair'],color="Person A name",
+                  text = 'Name Pair')
+    fig.update_layout(title='Top 1 marriage name pair per year',
+                  xaxis_title="Marriage Year",
+    yaxis_title="Count",
+    legend_title="Popular Names", height=800,width=1000)
+    fig.update_traces(textposition='top center',textfont_size=9)
     return fig
 
 
 @app.callback(
     Output('graphic', 'figure'),
-    Input('input_name', 'value'))
-def update_graph2(column_name):
-    import plotly.graph_objects as go
-    fig = go.Figure()
-    dff = top15[top15['name'] == column_name]
-    for nameb in dff["Spouse Name"].tolist():
-        dff2 = df[(df["Spouse Name"] == nameb) & (df['name'] == column_name)]
-        fig.add_trace(go.Scatter(x=dff2["Marriage Year"], y=dff2["Count"],
-                        mode='lines',
-                    name=nameb))
-    fig.update_layout(title= column_name + "'s spouse name pattern over time",
-                     xaxis_title="Marriage Year",
-                    yaxis_title="Count", 
-                     legend_title="Top Spouse Names")
+    Input('input_name', 'value'),
+Input('crossfilter-yaxis-type', 'value'))
+def update_graph2(column_name, yaxis):
+    dff = df[df['name'] == column_name]
+    fig = px.line(df[df.name== 'John'], x="Marriage Year", y= yaxis, color="Spouse Name")
+    fig.update_layout(title= column_name + "'s spouse name pattern over time")
+    fig.update_yaxes(title=yaxis)
     return fig
 
 if __name__ == "__main__":
