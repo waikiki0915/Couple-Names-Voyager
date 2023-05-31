@@ -91,6 +91,8 @@ def update_graph2(column_name, yaxis):
     dff = df[df['name'] == column_name]
     fig = px.line(dff, x="Marriage Year", y= yaxis, color="Spouse Name")
     fig.update_layout(title= column_name + "'s spouse name pattern over time")
+    if yaxis == 'Percentage':
+         fig.layout.yaxis.tickformat = ',.1%'
     fig.update_yaxes(title=yaxis)
     return fig
 
