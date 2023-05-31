@@ -1,11 +1,7 @@
 import pandas as pd
-df = pd.read_csv("full_data2.csv")
-top15 = pd.read_csv("top15.csv")
+df = pd.read_csv("df.csv")
 top1pair_perYear = pd.read_csv("top1pair_perYear.csv")
 top15.columns = ['name','Spouse Name', 'Count_overall']
-df.columns = ['name','Spouse Name', 'Marriage Year', 'Count','Percentage']
-df = df.merge(top15)
-df = df.sort_values (by = ['name','Count_overall','Marriage Year'], ascending=[False, False, True])
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
