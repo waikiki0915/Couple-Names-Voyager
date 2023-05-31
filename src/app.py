@@ -1,7 +1,6 @@
 import pandas as pd
 df = pd.read_csv("df.csv")
 top1pair_perYear = pd.read_csv("top1pair_perYear.csv")
-top15.columns = ['name','Spouse Name', 'Count_overall']
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
