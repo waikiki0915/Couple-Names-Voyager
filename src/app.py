@@ -1,6 +1,9 @@
 import pandas as pd
 df = pd.read_csv("df.csv")
+df = df.sort_values(by = ['name','Count_overall','Marriage Year'], ascending=[False, False, True])
 top1pair_perYear = pd.read_csv("top1pair_perYear.csv")
+top15 = pd.read_csv("top15.csv")
+top15.columns = ['name','Spouse Name', 'Count']
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
@@ -27,7 +30,6 @@ markdown_text3 = '''
 - You can enter your own first name to see if it make sense to you! 
 '''
 
-
 app.layout = html.Div([
    
     html.H1(children='Couple Names Voyager'),
@@ -43,7 +45,7 @@ app.layout = html.Div([
     dcc.Markdown(children=markdown_text3)
 ]),
 
-    html.Div(children='''
+    html.H4(children='''
         Enter a first name, and discover the evolving pattern of their spouse's name over time! 
     '''),
     
@@ -56,6 +58,10 @@ app.layout = html.Div([
                 id='input_name', 
                 placeholder="Type/Choose a first name"
             ),
+            dcc.Graph(id='pie'),
+        html.Div(children='''
+        Choose "count" or "percentage" to see the evolving pattern: 
+    '''),
             dcc.RadioItems(
                 ['Count', 'Percentage'],
                 'Count',
@@ -64,9 +70,9 @@ app.layout = html.Div([
             )
         ], style={'width': '48%', 'display': 'inline-block'}),
     ]),
-
     dcc.Graph(id='graphic')
 ])
+
 
 
 @app.callback(
@@ -75,11 +81,20 @@ app.layout = html.Div([
 def update_graph(column_name):
     fig = px.scatter(top1pair_perYear, x="Marriage Year", y="Count", hover_data=['Name Pair'],color="Person A name",
                   text = 'Name Pair')
-    fig.update_layout(title='Top 1 marriage name pair per year',
+    fig.update_layout(title='Unveiling the Reigning Duo: The Top Marriage Name Pair of Each Year',
                   xaxis_title="Marriage Year",
     yaxis_title="Count",
     legend_title="Popular Names", height=800,width=1000)
     fig.update_traces(textposition='top center',textfont_size=9)
+    return fig
+
+@app.callback(
+    Output('pie', 'figure'),
+    Input('input_name', 'value'))
+def update_graph(column_name):
+    dff = top15[top15['name'] == column_name]
+    fig = px.pie(dff, values='Count', names='Spouse Name', title= column_name + "'s Top Spouse Names")
+    fig.update_traces(textposition='inside', textinfo='percent+label', showlegend=False)
     return fig
 
 
@@ -95,6 +110,7 @@ def update_graph2(column_name, yaxis):
          fig.layout.yaxis.tickformat = ',.1%'
     fig.update_yaxes(title=yaxis)
     return fig
+
 
 if __name__ == "__main__":
     app.run_server(debug=False)
