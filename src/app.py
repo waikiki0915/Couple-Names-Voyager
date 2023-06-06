@@ -9,6 +9,7 @@ import plotly.express as px
 
 app = Dash(__name__)
 server = app.server
+
 markdown_text1 = '''
 - We showcase a 163-year trend of marriage couple names in King County, providing a fun and informative way to explore historical naming trends for couples.
 - With this tool, you can delve into the fascinating world of marriage names and discover how they've changed over time.
@@ -18,36 +19,48 @@ markdown_text1 = '''
 
 markdown_text2 = '''
 ### Overall Trend 
-- By showing the top 1 marriage couple name per year, you can discover how they've changed over time. Additionally,
+- By showing the top 1 marriage couple name per year, you can witness their evolution across time. Additionally,
 you can check [Baby Names Voyager](https://namerology.com/baby-name-grapher/) to see how those popular names become top marriage names 30 years later.
 '''
 
 
 markdown_text3 = '''
 ### Cultural and Historical Trend
-- Now let's play around the data (1.2 million marriage records) and see the cultural, historical, and social aspects that influence name choices in relationships.
+- Now, let's delve into the rich tapestry of data encompassing 1.2 million marriage records, allowing us to explore the cultural, historical, and social factors that shape name choices within relationships.
 - You can enter a Latin American/Asian/Arabic name and see their changes over time because of racial population makeup shift
-- You can enter your own first name to see if it make sense to you! 
+- You can enter your own first name to embark on a personal exploration! 
 '''
 
-app.layout = html.Div([
-   
-    html.H1(children='Couple Names Voyager'),
+colors = {
+    'background': '#F3F6FA',
+    'text': '#333333',
+    'accent': '#3366CC'
+}
+
+
+app.layout = html.Div(
+    [  
+    
+    html.H1(children='Couple Names Voyager', style={
+                'text-align': 'center',
+                'margin-bottom': '20px',
+                'color': colors['accent']
+            }),
     html.Div([
-    dcc.Markdown(children=markdown_text1)
+    dcc.Markdown(children=markdown_text1,style={'margin-bottom': '30px'},)
 ]),
         html.Div([
-    dcc.Markdown(children=markdown_text2)
+    dcc.Markdown(children=markdown_text2,style={'margin-bottom': '30px'})
 ]),
     dcc.Graph(id='overall'),
     
     html.Div([
-    dcc.Markdown(children=markdown_text3)
+    dcc.Markdown(children=markdown_text3, style={'margin-bottom': '30px'})
 ]),
 
     html.H4(children='''
         Enter a first name, and discover the evolving pattern of their spouse's name over time! 
-    '''),
+    ''',style={'margin-bottom': '10px', 'color': colors['accent']}),
     
     html.Div([
 
@@ -58,10 +71,11 @@ app.layout = html.Div([
                 id='input_name', 
                 placeholder="Type/Choose a first name"
             ),
-            dcc.Graph(id='pie'),
-        html.Div(children='''
+            dcc.Graph(id='pie')
+    ]),
+    html.Div(children='''
         Choose "count" or "percentage" to see the evolving pattern: 
-    '''),
+    ''',style={ 'margin-top': '30px', 'color': colors['accent']}),
             dcc.RadioItems(
                 ['Count', 'Percentage'],
                 'Count',
@@ -69,9 +83,14 @@ app.layout = html.Div([
                 labelStyle={'display': 'inline-block', 'marginTop': '5px'}
             )
         ], style={'width': '48%', 'display': 'inline-block'}),
-    ]),
+    
     dcc.Graph(id='graphic')
-])
+], style={
+        'font-family': 'Open Sans, sans-serif',
+        'padding': '20px',
+        'background-color': colors['background'],
+        'color': colors['text']
+    })
 
 
 
@@ -84,7 +103,7 @@ def update_graph(column_name):
     fig.update_layout(title='Unveiling the Reigning Duo: The Top Marriage Name Pair of Each Year',
                   xaxis_title="Marriage Year",
     yaxis_title="Count",
-    legend_title="Popular Names", height=800,width=1000)
+    legend_title="Popular Names", height=800,width=1200)
     fig.update_traces(textposition='top center',textfont_size=9)
     return fig
 
