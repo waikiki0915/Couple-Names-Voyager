@@ -15,6 +15,7 @@ markdown_text1 = '''
 - With this tool, you can delve into the fascinating world of marriage names and discover how they've changed over time.
 - To reveal the underlying name patterns and uncover people's (subconscious) name preferences.
 - A deeper understanding of the cultural, historical, and social aspects that influence name choices in relationships.
+- For comprehensive details and additional information about this project, we invite you to visit our [GitHub repository](https://github.com/cse512-23s/Couple-Names-Voyager/).
 '''
 
 markdown_text2 = '''
@@ -73,7 +74,7 @@ app.layout = html.Div(
             ),
             dcc.Graph(id='pie')
     ]),
-    html.Div(children='''
+    html.H5(children='''
         Choose "count" or "percentage" to see the evolving pattern: 
     ''',style={ 'margin-top': '30px', 'color': colors['accent']}),
             dcc.RadioItems(
@@ -82,7 +83,7 @@ app.layout = html.Div(
                 id='crossfilter-yaxis-type',
                 labelStyle={'display': 'inline-block', 'marginTop': '5px'}
             )
-        ], style={'width': '48%', 'display': 'inline-block'}),
+        ], style={'width': '60%', 'display': 'inline-block'}),
     
     dcc.Graph(id='graphic')
 ], style={
