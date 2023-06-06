@@ -74,7 +74,7 @@ app.layout = html.Div(
             ),
             dcc.Graph(id='pie')
     ]),
-    html.H5(children='''
+    html.H4(children='''
         Choose "count" or "percentage" to see the evolving pattern: 
     ''',style={ 'margin-top': '30px', 'color': colors['accent']}),
             dcc.RadioItems(
@@ -83,7 +83,7 @@ app.layout = html.Div(
                 id='crossfilter-yaxis-type',
                 labelStyle={'display': 'inline-block', 'marginTop': '5px'}
             )
-        ], style={'width': '60%', 'display': 'inline-block'}),
+        ], style={'width': '70%', 'display': 'inline-block'}),
     
     dcc.Graph(id='graphic')
 ], style={
