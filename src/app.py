@@ -28,7 +28,7 @@ you can check [Baby Names Voyager](https://namerology.com/baby-name-grapher/) to
 markdown_text3 = '''
 ### Cultural and Historical Trend
 - Now, let's delve into the rich tapestry of data encompassing 1.2 million marriage records, allowing us to explore the cultural, historical, and social factors that shape name choices within relationships.
-- You can enter a Latin American/Asian/Arabic name and see their changes over time because of racial population makeup shift
+- You can enter a Latin American/Asian/Arabic name and see their changes over time because of racial population makeup shift, for example, Jose and Maria, Leslie, etc. For more examples and interesting findings, we invite you to visit our [GitHub repository](https://github.com/cse512-23s/Couple-Names-Voyager/).
 - You can enter your own first name to embark on a personal exploration! 
 '''
 
